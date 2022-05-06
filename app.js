@@ -2,10 +2,15 @@
 
 const express = require('express');
 const app = express();
+
 var items = ["Buy food", "Cook Food", "Eat Food"];
+
 const bodyParser = require('body-parser');
+
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));
+
 app.get('/', (req, res) => {
 	var today = new Date();
 	var options = {
