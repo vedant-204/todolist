@@ -2,21 +2,28 @@
 
 const express = require('express');
 const app = express();
-
+var items = ["Buy food", "Cook Food", "Eat Food"];
 const bodyParser = require('body-parser');
-app.use('view engine', 'ejs');
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => {
-	res.send('Hello World!');
 	var today = new Date();
-	var currentDay = today.getDay();
-	var day = "";
-	if (currentDay === 6 || currentDay === 0) {
-		day = "Weekend";
-	} else {
-		day = "Weekday";
+	var options = {
+		weekday: "long",
+		day: "numeric",
+		month: "long",
 	}
-	res.render("list", {kindaDay: day});
+	var day = today.toLocaleDateString("en-US", options);
+	res.render("list", {kindaDay: day, newListItem: items});
+
 });
+
+app.post("/", function(req, res){
+	item = req.body.newItem;
+	items.push(item);
+	res.redirect("/");
+	console.log(item);
+})
 
 app.listen(3000, function() {
 	console.log('Listening on port 3000!');
